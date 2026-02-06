@@ -98,9 +98,17 @@ export default function Auditory({ onScore }: AuditoryProps) {
                 <div className="flex flex-col items-center gap-6 w-full max-w-sm">
                     <p className="text-zinc-400">聞こえた数字を入力してください</p>
                     <input
-                        type="number"
+                        type="text"
+                        inputMode="numeric"
+                        pattern="\d*"
                         value={input}
-                        onChange={(e) => setInput(e.target.value)}
+                        onChange={(e) => {
+                            // Convert full-width to half-width and filter non-digits
+                            const val = e.target.value.replace(/[０-９]/g, (s) => {
+                                return String.fromCharCode(s.charCodeAt(0) - 0xFEE0);
+                            }).replace(/[^0-9]/g, '');
+                            setInput(val);
+                        }}
                         className="w-full text-center text-4xl bg-transparent border-b-2 border-zinc-700 focus:border-blue-500 outline-none py-4 font-mono tracking-widest text-white"
                         autoFocus
                         onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}

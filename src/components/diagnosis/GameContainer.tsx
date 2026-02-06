@@ -96,7 +96,7 @@ export default function GameContainer() {
                         <h2 className="text-3xl font-bold mb-4 text-white">{currentGame.label}</h2>
                         <p className="text-zinc-400 mb-8 max-w-md">
                             このテストは {currentGame.duration} 秒間で行われます。<br />
-                            準備ができたら開始してください。
+                            準備が整ったら開始してください。
                         </p>
                         <button
                             onClick={startGame}

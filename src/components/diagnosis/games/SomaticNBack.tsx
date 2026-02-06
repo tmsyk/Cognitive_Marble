@@ -79,15 +79,26 @@ export default function SomaticNBack({ onScore }: SomaticNBackProps) {
     return (
         <div className="flex flex-col items-center justify-center h-full gap-8 p-4">
             {!isPlaying ? (
-                <div className="text-center">
-                    <h3 className="text-2xl font-bold mb-4">2-Back Task</h3>
-                    <p className="mb-8 text-zinc-400">
-                        次々と表示される図形が、<br />
-                        <span className="text-blue-400 font-bold">2つ前と同じ</span>ならボタンを押してください。
-                    </p>
+                <div className="text-center max-w-lg">
+                    <h3 className="text-2xl font-bold mb-6">2-Back Task (Working Memory)</h3>
+                    <div className="bg-zinc-800/50 p-6 rounded-xl border border-white/5 text-left mb-8 space-y-4">
+                        <p className="text-zinc-300">
+                            これは「記憶の保持力」を試すテストです。
+                        </p>
+                        <ol className="list-decimal list-inside text-zinc-400 space-y-2">
+                            <li>画面に図形が順番に表示されます（◯、△、□...）。</li>
+                            <li>常に<strong>「2つ前の図形」</strong>を覚えておいてください。</li>
+                            <li><span className="text-blue-400 font-bold">「今の図形」が「2つ前の図形」と同じ</span>場合にのみ、ボタンを押してください。</li>
+                        </ol>
+                        <div className="text-xs text-zinc-500 mt-4 pt-4 border-t border-white/5">
+                            例： <br />
+                            ◯ → △ → <span className="text-blue-400">◯（2つ前と同じ！押す）</span><br />
+                            □ → ☆ → □（2つ前と同じ！押す）
+                        </div>
+                    </div>
                     <button
                         onClick={startGame}
-                        className="px-8 py-3 bg-blue-600 rounded-full font-bold"
+                        className="px-8 py-3 bg-blue-600 rounded-full font-bold hover:bg-blue-500 transition-colors shadow-lg"
                     >
                         START
                     </button>

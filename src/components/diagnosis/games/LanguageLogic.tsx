@@ -10,6 +10,7 @@ interface LanguageLogicProps {
 }
 
 const QUESTIONS = [
+    // Easy: Concrete examples
     {
         definition: '「逆説的思考」とは、一般的に正しいと思われることの逆を考えることで、新しい視点や解決策を見出す思考法である。',
         example: '「急がば回れ」という言葉通り、近道を探すのをやめて地道なルートを選んだ。',
@@ -20,9 +21,36 @@ const QUESTIONS = [
         example: '彼は自分の新商品の欠点を指摘するレビューを徹底的に分析し、改良を加えた。',
         isMatch: false
     },
+    // Medium: Abstract applications
     {
         definition: '「サンクコスト効果」とは、すでに支払ったコストを取り戻そうとして、さらに損失を拡大させてしまう心理状態である。',
         example: 'つまらない映画だったが、チケット代がもったいないので最後まで見た。',
+        isMatch: true
+    },
+    {
+        definition: '「アンカリング効果」とは、最初に提示された情報（係留点）が、その後の判断や評価に強い影響を与える心理効果である。',
+        example: '最初に3000円の値札を見て高いと思ったが、次に1500円の商品を見て、実際は相場より高くても安いと感じてしまった。',
+        isMatch: true
+    },
+    {
+        definition: '「ストローマン論法」とは、相手の主張を歪めて引用し、その歪められた主張に反論することで、相手を論破したように見せかける手法である。',
+        example: 'A「子供は道路で遊ぶと危険だ」 B「Aさんは子供を家に閉じ込めておくべきだと言うのか！それは監禁だ！」',
+        isMatch: true
+    },
+    // Hard: Subtle distinctions
+    {
+        definition: '「相関関係と因果関係の混同」とは、二つの事象が同時に起きているだけで、原因と結果の関係にあると誤って判断することである。',
+        example: 'アイスクリームの売上が増える時期に水難事故が増えるため、アイスクリーム禁止令を出せば事故は減るはずだ。',
+        isMatch: true
+    },
+    {
+        definition: '「ダニング＝クルーガー効果」とは、能の低い人が自身の能力を過大評価してしまう認知バイアスである。',
+        example: '彼は初めてのプロジェクトで失敗したが、自分の準備不足を認め、次はもっと勉強してから挑もうと反省した。',
+        isMatch: false
+    },
+    {
+        definition: '「バンドワゴン効果」とは、多くの人が支持しているという理由だけで、その選択肢を支持したくなる心理効果である。',
+        example: '行列のできているラーメン屋を見て、美味しいに違いないと思い並ぶことにした。',
         isMatch: true
     }
 ];
@@ -32,6 +60,7 @@ export default function LanguageLogic({ onScore }: LanguageLogicProps) {
     const [score, setScore] = useState(0);
     const [feedback, setFeedback] = useState<'correct' | 'wrong' | null>(null);
 
+    // Use modulo to cycle through questions if we run out, but try to keep it within time
     const currentQ = QUESTIONS[index % QUESTIONS.length];
 
     const handleAnswer = (answer: boolean) => {
