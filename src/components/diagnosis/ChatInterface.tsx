@@ -95,7 +95,7 @@ export default function ChatInterface() {
                 // For now, let's append a system message with a button
                 setMessages(prev => [...prev, {
                     id: 'action-next',
-                    text: '准备好了吗？',
+                    text: '準備はいいですか？',
                     sender: 'bot',
                     options: [{ label: '実力チェックを開始する', scores: {} }] // Special handler needed
                 }])
@@ -121,8 +121,8 @@ export default function ChatInterface() {
                         >
                             <div
                                 className={`max-w-[80%] p-3 rounded-2xl ${msg.sender === 'user'
-                                        ? 'bg-blue-600 text-white rounded-br-none'
-                                        : 'bg-zinc-800 text-gray-100 rounded-bl-none border border-white/5'
+                                    ? 'bg-blue-600 text-white rounded-br-none'
+                                    : 'bg-zinc-800 text-gray-100 rounded-bl-none border border-white/5'
                                     }`}
                             >
                                 {msg.sender === 'bot' && (

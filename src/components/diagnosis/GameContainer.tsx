@@ -10,10 +10,10 @@ import LanguageLogic from '@/components/diagnosis/games/LanguageLogic';
 import SomaticNBack from '@/components/diagnosis/games/SomaticNBack';
 
 const GAMES = [
-    { id: 'visual_3d', type: 'visual', label: 'メンタル・ローテーション', Component: Visual3D, duration: 45 },
-    { id: 'auditory_1', type: 'auditory', label: 'ブラインド・リスニング', Component: Auditory, duration: 60 },
-    { id: 'language_1', type: 'language', label: '定義仕分けパズル', Component: LanguageLogic, duration: 45 },
-    { id: 'wm_1', type: 'wm', label: 'Nバック課題', Component: SomaticNBack, duration: 45 },
+    { id: 'visual_3d', types: ['visual'], label: 'メンタル・ローテーション', Component: Visual3D, duration: 45 },
+    { id: 'auditory_1', types: ['auditory'], label: 'ブラインド・リスニング', Component: Auditory, duration: 60 },
+    { id: 'language_1', types: ['language', 'logic'], label: '定義仕分けパズル', Component: LanguageLogic, duration: 45 },
+    { id: 'wm_1', types: ['wm', 'somatic'], label: 'Nバック課題', Component: SomaticNBack, duration: 45 },
 ];
 
 export default function GameContainer() {
@@ -53,9 +53,11 @@ export default function GameContainer() {
 
     const finishGame = () => {
         setIsPlaying(false);
-        // Commit score to Global Store
-        const currentGlobalScore = useStore.getState().realScores[currentGame.type as CognitiveType];
-        setRealScore(currentGame.type as CognitiveType, currentGlobalScore + currentSessionScore.current);
+        // Commit score to Global Store for ALL types this game covers
+        currentGame.types.forEach(type => {
+            const currentGlobalScore = useStore.getState().realScores[type as CognitiveType];
+            setRealScore(type as CognitiveType, currentGlobalScore + currentSessionScore.current);
+        });
 
         // Transition
         setTimeout(() => {
