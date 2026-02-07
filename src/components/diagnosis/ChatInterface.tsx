@@ -15,6 +15,12 @@ type Message = {
 
 export default function ChatInterface() {
     const { setSelfScore, setPhase } = useStore();
+    // Helper to shuffle questions
+    const [selectedQuestions] = useState(() => {
+        const shuffled = [...questions].sort(() => 0.5 - Math.random());
+        return shuffled.slice(0, 10);
+    });
+
     const [messages, setMessages] = useState<Message[]>([
         {
             id: 'intro',
@@ -22,10 +28,10 @@ export default function ChatInterface() {
             sender: 'bot',
         },
         {
-            id: 'q1',
-            text: questions[0].text,
+            id: selectedQuestions[0].id,
+            text: selectedQuestions[0].text,
             sender: 'bot',
-            options: questions[0].options,
+            options: selectedQuestions[0].options,
         },
     ]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -62,12 +68,12 @@ export default function ChatInterface() {
         // 3. Next Question or Finish
         const nextIndex = currentQuestionIndex + 1;
 
-        if (nextIndex < questions.length) {
+        if (nextIndex < selectedQuestions.length) {
             setIsTyping(true);
             await new Promise((resolve) => setTimeout(resolve, 800)); // Simulate thinking
             setIsTyping(false);
 
-            const nextQ = questions[nextIndex];
+            const nextQ = selectedQuestions[nextIndex];
             const botMsg: Message = {
                 id: nextQ.id,
                 text: nextQ.text,
