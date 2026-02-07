@@ -109,17 +109,21 @@ export default function Visual3D({ onScore }: Visual3DProps) {
 
   const handleAnswer = (isCorrect: boolean) => {
     if (isCorrect) {
-      setScore(s => s + 10);
-      onScore(10);
+      setScore(s => s + 8);
+      onScore(8);
       setFeedback('correct');
+      setTimeout(() => {
+        setFeedback(null);
+        setCurrentLevel(l => l + 1);
+      }, 800);
     } else {
       setFeedback('wrong');
+      // No penalty? or maybe small?
+      setTimeout(() => {
+        setFeedback(null);
+        // Retry or next? usually next or stay.
+      }, 800);
     }
-
-    setTimeout(() => {
-      setFeedback(null);
-      setCurrentLevel(prev => prev + 1);
-    }, 500);
   };
 
   const currentShape = SHAPES[currentShapeIdx];

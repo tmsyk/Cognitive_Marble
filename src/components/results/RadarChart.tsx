@@ -17,7 +17,8 @@ const AXES: { key: CognitiveType; label: string }[] = [
     { key: 'somatic', label: '体感覚' },
 ];
 
-const MAX_SCORE = 30; // Assumed max
+const MAX_SCORE = 100;
+const SELF_SCORE_MULTIPLIER = 10;
 
 // Helper to calculate polygon points
 const getPoints = (scores: Record<CognitiveType, number>, radius: number) => {
@@ -43,7 +44,13 @@ const getAxisPoint = (i: number, radius: number) => {
 export default function RadarChart({ selfScores, realScores }: RadarChartProps) {
     const radius = 100;
 
-    const selfPoints = getPoints(selfScores, radius);
+    // Apply multiplier to selfScores before passing to getPoints
+    const multipliedSelfScores: Record<CognitiveType, number> = Object.keys(selfScores).reduce((acc, key) => {
+        acc[key as CognitiveType] = selfScores[key as CognitiveType] * SELF_SCORE_MULTIPLIER;
+        return acc;
+    }, {} as Record<CognitiveType, number>);
+
+    const selfPoints = getPoints(multipliedSelfScores, radius);
     const realPoints = getPoints(realScores, radius);
 
     return (

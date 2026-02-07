@@ -4,43 +4,26 @@ import { motion } from 'framer-motion';
 import { useStore } from '@/store/useStore';
 import RadarChart from './RadarChart';
 import { ArrowRight } from 'lucide-react';
+import { analyzeResults } from '@/utils/analysisLogic';
+import { useState, useEffect } from 'react';
 // import MarbleCanvas from './MarbleCanvas'; // TODO
 
 export default function ResultsView() {
     const { selfScores, realScores, setPhase } = useStore();
 
-    // Simple feedback logic
-    const getFeedback = () => {
-        let msg = 'あなたの脳は非常にユニークです。';
+    // Advanced Analysis
+    const [analysis, setAnalysis] = useState<ReturnType<typeof analyzeResults> | null>(null);
 
-        // Find biggest gap
-        let maxGap = 0;
-        let gapType = '';
-
-        // Logic to iterating keys
-        const keys = Object.keys(selfScores) as (keyof typeof selfScores)[];
-
-        keys.forEach(key => {
-            const diff = realScores[key] - selfScores[key]; // Positive means Real > Self (Underestimated)
-            if (Math.abs(diff) > Math.abs(maxGap)) {
-                maxGap = diff;
-                gapType = key;
-            }
-        });
-
-        if (maxGap > 5) {
-            msg = `あなたは「${gapType.toUpperCase()}」の能力を過小評価しています。実はもっと得意なはずです。`;
-        } else if (maxGap < -5) {
-            msg = `あなたは「${gapType.toUpperCase()}」に頼りすぎているかもしれません。実際のスコアは少し低めでした。`;
-        } else {
-            msg = 'あなたの自己評価は非常に正確です。自分の能力をよく理解しています。';
+    useEffect(() => {
+        if (selfScores && realScores) {
+            setAnalysis(analyzeResults(selfScores, realScores));
         }
+    }, [selfScores, realScores]);
 
-        return msg;
-    };
+    if (!analysis) return null;
 
     return (
-        <div className="flex flex-col items-center min-h-screen p-8 space-y-12 max-w-4xl mx-auto">
+        <div className="flex flex-col items-center min-h-screen p-8 space-y-12 max-w-6xl mx-auto">
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -52,39 +35,66 @@ export default function ResultsView() {
                 <p className="text-zinc-400">あなたの「脳の取扱説明書」が生成されました。</p>
             </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 w-full items-center">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 w-full items-start">
                 {/* Left: Radar Chart (The "Gap") */}
                 <motion.div
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.2 }}
-                    className="flex flex-col items-center bg-zinc-900/50 p-8 rounded-3xl border border-white/5"
+                    className="flex flex-col items-center bg-zinc-900/50 p-8 rounded-3xl border border-white/5 h-full"
                 >
                     <h3 className="text-xl font-bold mb-8 text-zinc-300">GAP ANALYSIS</h3>
                     <RadarChart selfScores={selfScores} realScores={realScores} />
+
+                    <div className="mt-8 p-4 bg-white/5 rounded-xl border border-white/10 w-full">
+                        <h4 className="text-sm font-bold text-zinc-400 mb-2">SELF IMAGE GAP</h4>
+                        <p className="text-sm text-zinc-300 leading-relaxed">
+                            {analysis.gap ? analysis.gap.description : '自己評価と実力が一致しています。'}
+                        </p>
+                    </div>
                 </motion.div>
 
-                {/* Right: Marble (The "Color") - Placeholder for now */}
+                {/* Right: Cognitive Profile & Advice */}
                 <motion.div
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.4 }}
-                    className="flex flex-col items-center bg-zinc-900/50 p-8 rounded-3xl border border-white/5 min-h-[400px] justify-center relative overflow-hidden"
+                    className="flex flex-col gap-6"
                 >
-                    <h3 className="text-xl font-bold mb-8 text-zinc-300 z-10">COGNITIVE MARBLE</h3>
+                    {/* Primary Type Card */}
+                    <div className="bg-gradient-to-br from-zinc-900 to-black p-8 rounded-3xl border border-white/10 relative overflow-hidden group">
+                        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 opacity-50 group-hover:opacity-100 transition-opacity" />
 
-                    {/* Visual effect placeholder */}
-                    <div className="absolute inset-0 opacity-50 blur-3xl">
-                        <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-blue-500 rounded-full mix-blend-screen animate-pulse" />
-                        <div className="absolute bottom-1/4 right-1/4 w-32 h-32 bg-purple-500 rounded-full mix-blend-screen animate-pulse" style={{ animationDelay: '1s' }} />
-                        <div className="absolute top-1/2 left-1/2 w-40 h-40 bg-pink-500 rounded-full mix-blend-screen animate-pulse" style={{ animationDelay: '2s' }} />
+                        <h3 className="text-lg font-bold text-zinc-400 mb-2 uppercase tracking-widest">Cognitive Style</h3>
+                        <h2 className="text-3xl font-black text-white mb-4">{analysis.advice.title}</h2>
+                        <p className="text-zinc-300 leading-relaxed relative z-10">
+                            {analysis.advice.description}
+                        </p>
                     </div>
 
-                    <p className="z-10 text-center max-w-xs text-lg font-medium leading-relaxed">
-                        {getFeedback()}
-                    </p>
+                    {/* Advice Cards */}
+                    <div className="grid grid-cols-1 gap-4">
+                        <div className="bg-zinc-900/50 p-6 rounded-2xl border border-white/5 hover:border-blue-500/30 transition-colors">
+                            <h4 className="flex items-center gap-2 font-bold text-blue-400 mb-3">
+                                🧠 Recommended Study Method
+                            </h4>
+                            <p className="text-sm text-zinc-300 leading-relaxed">
+                                {analysis.advice.studyMethod}
+                            </p>
+                        </div>
+
+                        <div className="bg-zinc-900/50 p-6 rounded-2xl border border-white/5 hover:border-red-500/30 transition-colors">
+                            <h4 className="flex items-center gap-2 font-bold text-red-400 mb-3">
+                                ⚠️ Potential Pitfalls
+                            </h4>
+                            <p className="text-sm text-zinc-300 leading-relaxed">
+                                {analysis.advice.warning}
+                            </p>
+                        </div>
+                    </div>
                 </motion.div>
             </div>
+
 
             <motion.button
                 initial={{ opacity: 0, y: 20 }}

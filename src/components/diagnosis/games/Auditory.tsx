@@ -47,7 +47,7 @@ export default function Auditory({ onScore }: AuditoryProps) {
     const handleSubmit = () => {
         if (input === sequence) {
             setFeedback('success');
-            onScore(10 * level);
+            onScore(20); // Linear scoring: 20 points per level
 
             setTimeout(() => {
                 setFeedback(null);

@@ -62,7 +62,7 @@ export default function SomaticNBack({ onScore }: SomaticNBackProps) {
         if (currentIndex >= N_BACK && currentSymbol === nBackSymbol) {
             // Hit!
             setFeedback('hit');
-            onScore(15);
+            onScore(12);
         } else {
             // False Alarm
             setFeedback('false_alarm');
