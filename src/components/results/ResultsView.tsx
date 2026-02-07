@@ -66,8 +66,8 @@ export default function ResultsView() {
                         <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 opacity-50 group-hover:opacity-100 transition-opacity" />
 
                         <h3 className="text-lg font-bold text-zinc-400 mb-2 uppercase tracking-widest">Cognitive Style</h3>
-                        <h2 className="text-3xl font-black text-white mb-4">{analysis.advice.title}</h2>
-                        <p className="text-zinc-300 leading-relaxed relative z-10">
+                        <h2 className="text-3xl font-black text-white mb-4 relative z-10 drop-shadow-lg">{analysis.advice.title}</h2>
+                        <p className="text-zinc-300 leading-relaxed relative z-10 drop-shadow-md">
                             {analysis.advice.description}
                         </p>
                     </div>
