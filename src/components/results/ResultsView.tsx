@@ -4,9 +4,9 @@ import { motion } from 'framer-motion';
 import { useStore } from '@/store/useStore';
 import RadarChart from './RadarChart';
 import { ArrowRight } from 'lucide-react';
-import { analyzeResults } from '@/utils/analysisLogic';
+import { analyzeResults } from '@/utils/analysisLogic'; // Ensure this is imported
+import MarbleCanvas from './MarbleCanvas';
 import { useState, useEffect } from 'react';
-// import MarbleCanvas from './MarbleCanvas'; // TODO
 
 export default function ResultsView() {
     const { selfScores, realScores, setPhase } = useStore();
