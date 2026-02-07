@@ -63,7 +63,9 @@ export default function ResultsView() {
                 >
                     {/* Primary Type Card */}
                     <div className="bg-gradient-to-br from-zinc-900 to-black p-8 rounded-3xl border border-white/10 relative overflow-hidden group">
-                        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 opacity-50 group-hover:opacity-100 transition-opacity" />
+                        <div className="absolute inset-0 opacity-40 mix-blend-screen transition-opacity duration-700 group-hover:opacity-60">
+                            <MarbleCanvas />
+                        </div>
 
                         <h3 className="text-lg font-bold text-zinc-400 mb-2 uppercase tracking-widest">Cognitive Style</h3>
                         <h2 className="text-3xl font-black text-white mb-4 relative z-10 drop-shadow-lg">{analysis.advice.title}</h2>
